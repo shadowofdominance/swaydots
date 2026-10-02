@@ -2,9 +2,8 @@
 
 My personal dotfiles for a [Sway](https://swaywm.org/) (Wayland) desktop.
 
-<!-- Add a screenshot here:
-![Screenshot](screenshots/desktop.png)
--->
+![Screenshot](screenshot.png)
+
 
 ## What's included
 
