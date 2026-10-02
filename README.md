@@ -3,7 +3,9 @@
 My personal dotfiles for a [Sway](https://swaywm.org/) (Wayland) desktop.
 
 ![Screenshot](screenshot.png)
-
+![Screenshot1](screenshot1.png)
+![Screenshot2](screenshot2.png)
+![Screenshot3](screenshot3.png)
 
 ## What's included
 
