@@ -1,0 +1,69 @@
+#!/usr/bin/env bash
+
+set -e
+
+SCREENSHOT_DIR="$HOME/Pictures/Screenshots"
+mkdir -p "$SCREENSHOT_DIR"
+
+TIMESTAMP=$(date +"%Y-%m-%d_%H-%M-%S")
+OUTPUT="$SCREENSHOT_DIR/Screenshot_$TIMESTAMP.png"
+
+usage() {
+    echo "Usage: screenshot {full|window|region}"
+    echo
+    echo "Modes:"
+    echo "  full      Capture the entire screen"
+    echo "  window    Capture the focused window"
+    echo "  region    Select a region interactively"
+    exit 1
+}
+
+capture() {
+    grim "$@" "$OUTPUT"
+
+    # Copy image to Wayland clipboard
+    wl-copy --type image/png < "$OUTPUT"
+
+    notify-send \
+        -i "$OUTPUT" \
+        "Screenshot captured" \
+        "$(basename "$OUTPUT")"
+}
+
+case "$1" in
+
+    full)
+        capture
+        ;;
+
+    window)
+	sleep 2
+        GEOMETRY=$(swaymsg -t get_tree | \
+            jq -r '.. | select(.focused? == true) |
+            "\(.rect.x),\(.rect.y) \(.rect.width)x\(.rect.height)"' |
+            head -n 1)
+
+        if [[ -z "$GEOMETRY" || "$GEOMETRY" == "null" ]]; then
+            notify-send "Screenshot error" "Could not determine focused window."
+            exit 1
+        fi
+
+        capture -g "$GEOMETRY"
+        ;;
+
+    region)
+        GEOMETRY=$(slurp)
+
+        # User pressed Escape / cancelled selection
+        if [[ -z "$GEOMETRY" ]]; then
+            exit 0
+        fi
+
+        capture -g "$GEOMETRY"
+        ;;
+
+    *)
+        usage
+        ;;
+
+esac
