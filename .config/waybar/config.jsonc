@@ -1,0 +1,113 @@
+// ~/.config/waybar/config.jsonc
+// Glyphs are written as \uXXXX escapes (Nerd Font / Font Awesome range) so they survive copy-paste.
+{
+  "layer": "top",
+  "position": "top",
+  "height": 42,
+  "margin-top": 6,
+  "margin-left": 10,
+  "margin-right": 10,
+  "spacing": 0,
+  "reload_style_on_change": true,
+
+  "modules-left": ["sway/workspaces", "sway/window"],
+  "modules-center": ["clock"],
+  "modules-right": ["pulseaudio", "backlight", "cpu", "memory", "battery", "tray"],
+
+  // ── LEFT ────────────────────────────────────────────────
+  "sway/workspaces": {
+    "format": "{name}",
+    "disable-scroll": false,
+    "all-outputs": false
+  },
+
+  // Focused window title. max-length caps the pill so it never grows past that width.
+  "sway/window": {
+    "format": "{title}",
+    "max-length": 40,
+    "tooltip": true
+  },
+
+  // ── CENTER ──────────────────────────────────────────────
+  "clock": {
+    "format": "\uf017  {:%H:%M  \u2022  %a, %d/%m}",
+    "format-alt": "\uf073  {:%A, %d %B %Y}",
+    "tooltip-format": "<tt>{calendar}</tt>",
+    "calendar": {
+      "mode": "month",
+      "weeks-pos": "right",
+      "on-scroll": 1,
+      "format": {
+        "months": "<span color='#bd93f9'><b>{}</b></span>",
+        "days": "<span color='#f8f8f2'>{}</span>",
+        "weeks": "<span color='#6272a4'>W{}</span>",
+        "weekdays": "<span color='#ff79c6'><b>{}</b></span>",
+        "today": "<span color='#50fa7b'><b><u>{}</u></b></span>"
+      }
+    },
+    "actions": {
+      "on-click": "mode",
+      "on-scroll-up": "shift_up",
+      "on-scroll-down": "shift_down"
+    }
+  },
+
+  // ── RIGHT ───────────────────────────────────────────────
+  "pulseaudio": {
+    "format": "{icon}  {volume}%",
+    "format-muted": "\uf6a9  muted",
+    "format-bluetooth": "\uf294 {icon}  {volume}%",
+    "format-icons": {
+      "default": ["\uf026", "\uf027", "\uf028"],
+      "headphone": "\uf025"
+    },
+    "scroll-step": 5,
+    "on-click": "pactl set-sink-mute @DEFAULT_SINK@ toggle",
+    "on-click-right": "pavucontrol",
+    "tooltip-format": "{desc}\nVolume: {volume}%"
+  },
+
+  "backlight": {
+    "format": "{icon}  {percent}%",
+    "format-icons": ["\uf186", "\uf185"],
+    "scroll-step": 5,
+    "tooltip-format": "Brightness: {percent}%"
+  },
+
+  "cpu": {
+    "format": "\uf2db  {usage}%",
+    "interval": 2,
+    "tooltip": true,
+    "on-click": "kitty -e btop"
+  },
+
+  "memory": {
+    "format": "\uefc5  {used:0.1f}G",
+    "tooltip-format": "{used:0.1f} GiB / {total:0.1f} GiB  ({percentage}%)\nSwap: {swapUsed:0.1f} / {swapTotal:0.1f} GiB",
+    "interval": 5,
+    "on-click": "kitty -e btop"
+  },
+
+  "battery": {
+    "states": { "good": 80, "warning": 30, "critical": 15 },
+    "format": "{icon}  {capacity}%",
+    "format-charging": "\uf0e7  {capacity}%",
+    "format-plugged": "\uf1e6  {capacity}%",
+    "format-full": "\uf240  {capacity}%",
+    "format-icons": ["\uf244", "\uf243", "\uf242", "\uf241", "\uf240"],
+    "tooltip-format": "{timeTo}\n{power}W"
+  },
+
+  // StatusNotifierItem tray: Claude, Discord, Steam, nm-applet, etc. show up here.
+  "tray": {
+    "icon-size": 18,
+    "spacing": 10,
+    "show-passive-items": true
+  },
+
+  "custom/power": {
+    "format": "\u23fb",
+    "tooltip-format": "Power menu",
+    "on-click": "powermenu"
+  }
+}

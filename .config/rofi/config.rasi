@@ -1,0 +1,153 @@
+/*
+ * Rofi launcher, styled to match the Quickshell menus (Dracula + #BD93F9 accent).
+ * Keep the colours / font / radii in sync with ~/.config/quickshell/menus/config/Style.qml
+ * Put this file at ~/.config/rofi/config.rasi
+ */
+
+configuration {
+    modi:                 "drun";
+    show-icons:           true;
+    display-drun:         ">";
+    drun-display-format:  "{name}";
+    disable-history:      false;
+    hover-select:         true;
+    me-select-entry:      "";
+    me-accept-entry:      "MousePrimary";
+}
+
+* {
+    /* palette (same values as Style.qml) */
+    bg:           #282A36;
+    bg-panel:     #282A36EB;
+    surface:      #44475A;
+    surface-soft: #44475A99;
+    fg:           #F8F8F2;
+    muted:        #6272A4;
+    accent:       #BD93F9;
+    accent-soft:  #BD93F92E;
+    accent-line:  #BD93F999;
+    red:          #FF5555;
+    red-soft:     #FF55552E;
+    outline:      #F8F8F21F;
+
+    font:             "JetBrainsMono Nerd Font 12";
+    background-color: transparent;
+    text-color:       @fg;
+}
+
+window {
+    location:         center;
+    anchor:           center;
+    width:            640px;
+    padding:          14px;
+    background-color: @bg-panel;
+    border:           1px;
+    border-color:     @outline;
+    border-radius:    22px;
+}
+
+mainbox {
+    spacing:  12px;
+    children: [ inputbar, message, listview ];
+}
+
+/* ---------- search bar ---------- */
+inputbar {
+    spacing:          12px;
+    padding:          12px 16px;
+    background-color: @surface-soft;
+    border:           1px;
+    border-color:     @outline;
+    border-radius:    12px;
+    children:         [ prompt, entry ];
+}
+
+prompt {
+    text-color:     @accent;
+    font:           "JetBrainsMono Nerd Font 14";
+    vertical-align: 0.5;
+}
+
+entry {
+    placeholder:       "Search apps…";
+    placeholder-color: @muted;
+    text-color:        @fg;
+    vertical-align:    0.5;
+}
+
+/* ---------- messages ---------- */
+message {
+    padding:          10px 14px;
+    background-color: @surface-soft;
+    border-radius:    12px;
+}
+
+textbox {
+    text-color: @fg;
+}
+
+/* ---------- list ---------- */
+listview {
+    lines:        8;
+    columns:      1;
+    fixed-height: false;
+    dynamic:      true;
+    cycle:        true;
+    scrollbar:    false;
+    spacing:      4px;
+}
+
+element {
+    padding:       8px 12px;
+    spacing:       14px;
+    border:        1px;
+    border-color:  transparent;
+    border-radius: 12px;
+    orientation:   horizontal;
+}
+
+element-icon {
+    size:             2.2em;
+    background-color: transparent;
+}
+
+element-text {
+    vertical-align:   0.5;
+    background-color: transparent;
+    text-color:       inherit;
+}
+
+element normal.normal,
+element alternate.normal {
+    background-color: transparent;
+    text-color:       @fg;
+}
+
+element normal.urgent,
+element alternate.urgent {
+    text-color: @red;
+}
+
+element normal.active,
+element alternate.active {
+    text-color: @accent;
+}
+
+/* selected row: soft accent fill + thin accent outline (same as the Quickshell list rows) */
+element selected.normal {
+    background-color: @accent-soft;
+    border-color:     @accent-line;
+    text-color:       @fg;
+}
+
+element selected.urgent {
+    background-color: @red-soft;
+    border-color:     @red;
+    text-color:       @red;
+}
+
+element selected.active {
+    background-color: @accent-soft;
+    border-color:     @accent-line;
+    text-color:       @accent;
+}

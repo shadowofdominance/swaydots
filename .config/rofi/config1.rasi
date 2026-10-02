@@ -1,0 +1,153 @@
+/* Dracula theme based on the Purple official rofi theme */
+
+configuration {
+    show-icons:      true;
+    display-drun:    "";
+    disable-history: false;
+}
+
+* {
+    font: "Bahnschrift 12";
+    foreground: #f8f8f2;
+    /* Added 8-digit HEX (e0 = ~88% opacity) for background transparency */
+    background-color: #282a36e0;
+    active-background: #BD93F9;
+    urgent-background: #ff5555;
+    urgent-foreground: #282a36;
+    selected-background: @active-background;
+    selected-urgent-background: @urgent-background;
+    selected-active-background: @active-background;
+    separatorcolor: @active-background;
+    bordercolor: @active-background;
+}
+
+#window {
+    /* Set background transparent so window borders render clean */
+    width: 800;
+    height: 470;
+    background-color: #282a36e0;
+    border:           1;
+    border-radius:    10;
+    border-color:     @bordercolor;
+    padding:          15;
+}
+#mainbox {
+    border:  0;
+    padding: 0;
+    background-color: transparent;
+}
+#message {
+    border:       0px;
+    border-color: @separatorcolor;
+    padding:      1px;
+}
+#textbox {
+    text-color: @foreground;
+}
+#listview {
+    fixed-height: 0;
+    border:       0px;
+    border-color: @bordercolor;
+    spacing:      4px;
+    scrollbar:    false;
+    padding:      2px 0px 0px;
+    background-color: transparent;
+}
+#element {
+    border:        0;
+    border-radius: 6px;
+    padding:       6px;
+    background-color: transparent;
+}
+#element.normal.normal {
+    background-color: transparent;
+    text-color:       @foreground;
+}
+#element.normal.urgent {
+    background-color: @urgent-background;
+    text-color:       @urgent-foreground;
+}
+#element.normal.active {
+    background-color: transparent;
+    text-color:       @foreground;
+}
+
+/* --- SELECTION BORDER CHANGES --- */
+#element.selected.normal {
+    background-color: transparent;      /* Removes solid purple background */
+    border:           2px;              /* Sets border thickness */
+    border-color:     #BD93F9;          /* Dracula Purple border */
+    text-color:       #BD93F9;          /* Dracula Purple text for selected item */
+}
+#element.selected.urgent {
+    background-color: transparent;
+    border:           2px;
+    border-color:     @urgent-background;
+    text-color:       @urgent-background;
+}
+#element.selected.active {
+    background-color: transparent;
+    border:           2px;
+    border-color:     #BD93F9;
+    text-color:       #BD93F9;
+}
+
+#element.alternate.normal {
+    background-color: transparent;
+    text-color:       @foreground;
+}
+#element.alternate.urgent {
+    background-color: @urgent-background;
+    text-color:       @foreground;
+}
+#element.alternate.active {
+    background-color: transparent;
+    text-color:       @foreground;
+}
+#scrollbar {
+    width:        2px;
+    border:       0;
+    handle-width: 8px;
+    padding:      0;
+}
+#sidebar {
+    border:       2px dash 0px 0px;
+    border-color: @separatorcolor;
+}
+#button.selected {
+    background-color: transparent;
+    border:           2px;
+    border-color:     #BD93F9;
+    text-color:       #BD93F9;
+}
+#inputbar {
+    spacing:          0;
+    text-color:       @foreground;
+    padding:          4px;
+    background-color: transparent;
+}
+#case-indicator {
+    spacing:    0;
+    text-color: @foreground;
+}
+#entry {
+    spacing:    0;
+    text-color: @foreground;
+}
+#prompt {
+    spacing:    0;
+    text-color: @foreground;
+}
+#inputbar {
+    children:   [ prompt,textbox-prompt-colon,entry,case-indicator ];
+}
+#textbox-prompt-colon {
+    expand:     false;
+    str:        ">";
+    margin:     0px 0.3em 0em 0em;
+    text-color: @foreground;
+}
+element-text, element-icon {
+    background-color: transparent;
+    text-color:       inherit;
+}

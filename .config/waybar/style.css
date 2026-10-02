@@ -1,0 +1,116 @@
+/* ~/.config/waybar/style.css */
+@import "colors.css";
+
+* {
+  font-family: "JetBrainsMono Nerd Font", "JetBrains Mono", monospace;
+  font-size: 14px;
+  font-weight: 600;
+  border: none;
+  border-radius: 0;
+  min-height: 0;
+}
+
+/* ── The floating capsule ───────────────────────────────── */
+window#waybar {
+  background: alpha(@bg-dark, 0.75);
+  color: @fg;
+  border: 1px solid alpha(@accent, 0.30);
+  border-radius: 21px;
+}
+
+window#waybar > box {
+  padding: 3px 6px;
+}
+
+tooltip {
+  background: @bg;
+  color: @fg;
+  border: 1px solid @accent;
+  border-radius: 12px;
+}
+tooltip label { color: @fg; padding: 2px; }
+
+/* ── Shared pill look ───────────────────────────────────── */
+#pulseaudio, #backlight, #cpu, #memory, #battery, #tray, #clock,
+#workspaces, #window, #custom-power {
+  background: alpha(@current, 0.45);
+  border: 1px solid alpha(@accent, 0.12);
+  border-radius: 15px;
+  padding: 0 14px;
+  margin: 3px 3px;
+}
+
+/* ── Left: workspaces ───────────────────────────────────── */
+#workspaces { padding: 0 4px; }
+
+#workspaces button {
+  color: @comment;
+  background: transparent;
+  border-radius: 12px;
+  padding: 0 10px;
+  margin: 3px 2px;
+  transition: all 0.2s ease;
+}
+#workspaces button:hover {
+  background: alpha(@accent, 0.20);
+  color: @fg;
+}
+#workspaces button.focused,
+#workspaces button.active {
+  background: @accent;
+  color: @bg;
+}
+#workspaces button.urgent {
+  background: @red;
+  color: @bg;
+}
+
+/* ── Left: focused window title ─────────────────────────── */
+#window {
+  color: @accent;
+}
+window#waybar.empty #window {
+    padding: 0;
+    margin: 0;
+    border: none;
+    background: none;
+    min-width: 0;
+    min-height: 0;
+}
+/* ── Center ─────────────────────────────────────────────── */
+#clock {
+  color: @accent;
+  padding: 0 18px;
+}
+
+/* ── Right ──────────────────────────────────────────────── */
+#pulseaudio     { color: @cyan; }
+#pulseaudio.muted { color: @comment; }
+#backlight      { color: @orange; }
+#cpu            { color: @green; }
+#memory         { color: @pink; }
+#battery        { color: @yellow; }
+#battery.good   { color: @green; }
+#battery.charging,
+#battery.plugged { color: @green; }
+#battery.warning:not(.charging)  { color: @orange; }
+#battery.critical:not(.charging) {
+  color: @bg;
+  background: @red;
+  animation: blink 1s steps(2) infinite;
+}
+@keyframes blink { to { background: alpha(@red, 0.4); } }
+
+#tray { padding: 0 10px; }
+
+#custom-power {
+  color: @red;
+  padding: 0 12px;
+  font-size: 15px;
+}
+#custom-power:hover { background: alpha(@red, 0.25); }
+#tray > .passive { -gtk-icon-effect: dim; }
+#tray > .needs-attention {
+  -gtk-icon-effect: highlight;
+  background: alpha(@red, 0.35);
+}

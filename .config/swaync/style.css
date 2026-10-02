@@ -1,0 +1,642 @@
+/*
+ * Dracula for SwayNotificationCenter (swaync)
+ * https://draculatheme.com
+ *
+ * Drop this file in as `~/.config/swaync/style.css`, then reload:
+ *   swaync-client --reload-css
+ *
+ * Palette: https://spec.draculatheme.com
+ *
+ * Colours are all in the :root block below.
+ */
+
+:root {
+  /* Dracula palette */
+  --background: #282a36;
+  --bg-darker: #21222c;
+  --current-line: #44475a;
+  --foreground: #f8f8f2;
+  --comment: #6272a4;
+  --cyan: #8be9fd;
+  --green: #50fa7b;
+  --orange: #ffb86c;
+  --pink: #ff79c6;
+  --purple: #bd93f9;
+  --red: #ff5555;
+  --yellow: #f1fa8c;
+
+  /* Roles */
+  --accent: var(--purple);
+  --card: #2b2d3b; /* notification card, a step above the base bg */
+  --card-hover: #343748;
+  --cc-bg: rgba(26, 27, 35, 0.96); /* control center backdrop */
+  --chip: #21222c; /* buttons, toggles, entries */
+  --chip-hover: #343748;
+
+  --text: #f8f8f2;
+  --text-dim: #a3a9c9; /* body / secondary text */
+  --text-faint: #6272a4; /* timestamps, disabled */
+
+  --radius: 12px;
+  --radius-card: 11px;
+  --stripe: 4px; /* urgency stripe width */
+  --stripe-critical: 5px; /* critical stripe, a touch thicker for weight */
+  --elev: 0 2px 10px rgba(0, 0, 0, 0.35);
+  --critical-red: #ff6e6e; /* AA-readable red type for critical title + time (5.00:1) */
+  --hover-transition: background 0.15s ease-in-out;
+
+  /* swaync still reads a few of its own vars; keep them mapped. */
+  --noti-bg: 43, 45, 59; /* --card as r,g,b */
+  --noti-bg-alpha: 1;
+
+  /* Uncomment if you use a Nerd Font for the widget icons. */
+  /* font-family: "JetBrainsMono Nerd Font", sans-serif; */
+}
+
+/* ── Windows ────────────────────────────────────────────────────────── */
+notificationwindow,
+blankwindow,
+.blank-window,
+.floating-notifications {
+  background: transparent;
+}
+
+/* ── Close button (round X) ────────────────────────────────────────── */
+.close-button {
+  background: var(--chip);
+  color: var(--text-dim);
+  text-shadow: none;
+  padding: 0;
+  border-radius: 100%;
+  margin-top: 10px;
+  margin-right: 10px;
+  box-shadow: none;
+  border: none;
+  min-width: 22px;
+  min-height: 22px;
+}
+
+.close-button:hover {
+  background: var(--red);
+  color: var(--bg-darker);
+  transition: var(--hover-transition);
+  border: none;
+}
+
+/* ── Notification card ─────────────────────────────────────────────── */
+/* swaync auto-focuses the first row when the control center opens; kill every
+   default focus/selection background so all cards look identical. */
+.notification-row,
+.notification-row:focus,
+.notification-row:hover,
+.notification-row:active,
+.notification-row:selected,
+.notification-background,
+.notification-background:focus,
+.notification-background:hover,
+.notification-background:selected {
+  background: transparent;
+  outline: none;
+}
+
+/* The control center is a GtkListBox; it auto-focuses the first row. Keep those
+   rows flat so no selection box appears behind the first card. */
+.control-center row,
+.control-center row:focus,
+.control-center row:selected,
+.control-center row:active {
+  background: transparent;
+  box-shadow: none;
+}
+
+.notification-row .notification-background {
+  padding: 7px 11px;
+}
+
+.notification-row .notification-background .notification {
+  border-radius: var(--radius-card);
+  border: none;
+  padding: 0;
+  transition: var(--hover-transition);
+  background: var(--card);
+  /* left stripe carries urgency; soft shadow lifts the card off the backdrop */
+  box-shadow:
+    inset var(--stripe) 0 0 0 var(--accent),
+    var(--elev);
+}
+
+/* Priority: stripe colour (+ a faint wash for critical) */
+.notification-row .notification-background .notification.low {
+  box-shadow:
+    inset var(--stripe) 0 0 0 var(--comment),
+    var(--elev);
+}
+
+/* Critical: clean --card surface (so body text stays crisp — no wash, no mud).
+   Urgency lives at the card EDGE: a thicker red stripe, a near-opaque red ring,
+   and a soft red glow — none of which ever sit under text — plus red title/time. */
+.notification-row .notification-background .notification.critical {
+  box-shadow:
+    inset var(--stripe-critical) 0 0 0 var(--red),
+    0 0 0 1px rgba(255, 85, 85, 0.85),
+    0 0 13px 1px rgba(255, 85, 85, 0.26),
+    var(--elev);
+}
+
+/* Hover intensifies the ring + glow so they still read on the lighter card-hover. */
+.notification-row .notification-background .notification.critical:hover {
+  box-shadow:
+    inset var(--stripe-critical) 0 0 0 var(--red),
+    0 0 0 1px rgba(255, 85, 85, 0.92),
+    0 0 15px 1px rgba(255, 85, 85, 0.32),
+    var(--elev);
+}
+
+/* Critical type signals: title + timestamp glow red; body stays high-contrast gray. */
+.notification.critical .notification-content .text-box .summary {
+  color: var(--critical-red);
+}
+
+.notification.critical .notification-content .text-box .time {
+  color: var(--critical-red);
+  font-weight: 700;
+}
+
+/* The big clickable area (icon + text) */
+.notification-row
+  .notification-background
+  .notification
+  .notification-default-action {
+  padding: 11px 14px 11px 16px;
+  margin: 0;
+  box-shadow: none;
+  background: transparent;
+  border: none;
+  color: var(--text);
+  transition: var(--hover-transition);
+  border-radius: var(--radius-card);
+}
+
+/* keyboard focus (control center auto-focuses the first card) must not paint a box */
+.notification-row
+  .notification-background
+  .notification
+  .notification-default-action:focus,
+.notification-row
+  .notification-background
+  .notification
+  .notification-default-action:active {
+  background: transparent;
+  outline: none;
+  box-shadow: none;
+}
+
+.notification-row
+  .notification-background
+  .notification
+  .notification-default-action:hover {
+  -gtk-icon-filter: none;
+  background: var(--card-hover);
+}
+
+.notification-row
+  .notification-background
+  .notification
+  .notification-default-action:not(:only-child) {
+  border-bottom-left-radius: 0;
+  border-bottom-right-radius: 0;
+}
+
+/* ── Content ───────────────────────────────────────────────────────── */
+.notification-default-action .notification-content {
+  background: transparent;
+  border-radius: var(--radius-card);
+  padding: 0;
+}
+
+.notification-content .image {
+  -gtk-icon-filter: none;
+  -gtk-icon-size: 48px;
+  border-radius: 8px;
+  margin: 2px 12px 2px 2px;
+}
+
+.notification-content .app-icon {
+  -gtk-icon-filter: none;
+  -gtk-icon-size: 20px;
+  -gtk-icon-shadow: 0 1px 4px black;
+  margin: 6px;
+}
+
+.notification-content .text-box label {
+  filter: none;
+}
+
+.notification-content .text-box .summary {
+  font-size: 15px;
+  font-weight: 700;
+  background: transparent;
+  color: var(--text);
+  text-shadow: none;
+}
+
+.notification-content .text-box .time {
+  font-size: 12px;
+  font-weight: 500;
+  background: transparent;
+  color: var(--text-faint);
+  text-shadow: none;
+  margin-right: 26px;
+}
+
+.notification-content .text-box .body {
+  font-size: 14px;
+  font-weight: normal;
+  background: transparent;
+  color: var(--text-dim);
+  text-shadow: none;
+  margin-top: 2px;
+}
+
+.notification-content progressbar {
+  margin-top: 8px;
+}
+
+.notification-content progressbar trough {
+  background-color: var(--bg-darker);
+  border-radius: 100px;
+  min-height: 6px;
+}
+
+.notification-content progressbar progress {
+  background-color: var(--accent);
+  border-radius: 100px;
+}
+
+.notification.critical .notification-content progressbar progress {
+  background-color: var(--red);
+}
+
+.notification-content .body-image {
+  margin-top: 8px;
+  background-color: var(--foreground);
+  -gtk-icon-filter: none;
+  border-radius: 8px;
+}
+
+/* Inline reply */
+.notification-content .inline-reply {
+  margin-top: 8px;
+}
+
+.inline-reply .inline-reply-entry {
+  background: var(--chip);
+  color: var(--text);
+  caret-color: var(--text);
+  border: 1px solid var(--current-line);
+  border-radius: 9px;
+}
+
+.inline-reply .inline-reply-button {
+  margin-left: 6px;
+  background: var(--chip);
+  border: 1px solid var(--current-line);
+  border-radius: 9px;
+  color: var(--text);
+}
+
+.inline-reply .inline-reply-button:hover {
+  background: var(--chip-hover);
+}
+
+.inline-reply .inline-reply-button:disabled {
+  background: initial;
+  color: var(--text-faint);
+  border-color: transparent;
+}
+
+/* Alt actions (buttons under a notification) */
+.notification-alt-actions {
+  background: none;
+  border-bottom-left-radius: var(--radius-card);
+  border-bottom-right-radius: var(--radius-card);
+  padding: 0 14px 10px 16px;
+}
+
+.notification-action {
+  margin: 0 4px;
+  padding: 0;
+}
+
+.notification-action > button {
+  border-radius: 9px;
+  color: var(--text);
+  background: var(--chip);
+  border: none;
+  padding: 7px 0;
+}
+
+.notification-action > button:hover {
+  background: var(--chip-hover);
+}
+
+.notification-action > button:active {
+  background: var(--current-line);
+}
+
+/* ── Grouped notifications ─────────────────────────────────────────── */
+.notification-group {
+  transition: opacity 200ms ease-in-out;
+}
+
+.notification-group .notification-group-close-button .close-button {
+  margin: 12px 20px;
+}
+
+.notification-group .notification-group-headers {
+  margin: 0 18px;
+  color: var(--text-dim);
+}
+
+.notification-group .notification-group-headers .notification-group-icon {
+  color: var(--text);
+  -gtk-icon-size: 24px;
+}
+
+.notification-group .notification-group-headers .notification-group-header {
+  color: var(--text-dim);
+  font-weight: 600;
+}
+
+.notification-group .notification-group-buttons {
+  margin: 0 18px;
+  color: var(--text);
+}
+
+.notification-group.collapsed.not-expanded {
+  opacity: 0.45;
+}
+
+.notification-group.collapsed
+  .notification-row:not(:last-child)
+  .notification-action,
+.notification-group.collapsed
+  .notification-row:not(:last-child)
+  .notification-default-action {
+  opacity: 0;
+}
+
+.notification-group.collapsed:hover
+  .notification-row:not(:only-child)
+  .notification {
+  background-color: var(--card-hover);
+}
+
+/* ── Control center ────────────────────────────────────────────────── */
+.control-center {
+  background: var(--cc-bg);
+  color: var(--text);
+  border-radius: 16px;
+  border: 1px solid rgba(98, 114, 164, 0.18);
+  box-shadow: 0 8px 28px rgba(0, 0, 0, 0.45);
+  padding: 16px;
+}
+
+.control-center .control-center-list-placeholder {
+  opacity: 0.5;
+  color: var(--text-faint);
+}
+
+.control-center .control-center-list {
+  background: transparent;
+}
+
+/* ── Sliders / scrollbars ──────────────────────────────────────────── */
+scale trough {
+  background-color: var(--bg-darker);
+  border-radius: 100px;
+  min-height: 7px;
+}
+
+scale highlight {
+  background-color: var(--accent);
+  border-radius: 100px;
+}
+
+scale slider {
+  background-color: var(--foreground);
+  border-radius: 100%;
+  min-width: 14px;
+  min-height: 14px;
+  margin: -6px;
+  box-shadow: 0 0 2px rgba(0, 0, 0, 0.6);
+}
+
+scrollbar {
+  background: transparent;
+}
+
+scrollbar slider {
+  background: var(--current-line);
+  border-radius: 100px;
+  min-width: 6px;
+  min-height: 6px;
+}
+
+scrollbar slider:hover {
+  background: var(--comment);
+}
+
+/* ── Widgets ───────────────────────────────────────────────────────── */
+.widget {
+  margin: 6px 4px;
+  padding: 0;
+}
+
+/* Title row + "clear all" */
+.widget-title {
+  margin: 2px 6px 10px 6px;
+}
+
+.widget-title > label {
+  color: var(--text);
+  font-size: 1.4em;
+  font-weight: 700;
+}
+
+.widget-title button {
+  font-size: 0.95em;
+  color: var(--text);
+  background: var(--chip);
+  border: none;
+  border-radius: 9px;
+  padding: 7px 14px;
+}
+
+.widget-title button:hover {
+  background: var(--chip-hover);
+}
+
+/* Do Not Disturb */
+.widget-dnd {
+  margin: 8px 6px;
+  font-size: 1.05rem;
+  color: var(--text-dim);
+}
+
+.widget-dnd > switch {
+  font-size: initial;
+  border-radius: 100px;
+  background: var(--chip);
+  border: none;
+  box-shadow: none;
+  min-width: 48px;
+  min-height: 24px;
+}
+
+.widget-dnd > switch:checked {
+  background: var(--accent);
+}
+
+.widget-dnd > switch slider {
+  background: var(--foreground);
+  border-radius: 100%;
+  min-width: 18px;
+  min-height: 18px;
+}
+
+/* Free-text label */
+.widget-label {
+  margin: 8px 6px;
+}
+
+.widget-label > label {
+  color: var(--text-dim);
+}
+
+/* Media player (mpris) */
+.widget-mpris .widget-mpris-player {
+  background: var(--card);
+  border: none;
+  border-radius: var(--radius-card);
+  box-shadow: var(--elev);
+  padding: 12px;
+  margin: 6px;
+  color: var(--text);
+}
+
+.widget-mpris .widget-mpris-title {
+  font-weight: 700;
+  color: var(--text);
+}
+
+.widget-mpris .widget-mpris-subtitle {
+  color: var(--text-dim);
+}
+
+.widget-mpris button {
+  color: var(--text);
+  border-radius: 9px;
+}
+
+.widget-mpris button:hover {
+  background: var(--chip-hover);
+}
+
+.widget-mpris button:disabled {
+  opacity: 0.5;
+}
+
+/* Quick-action button grid */
+.widget-buttons-grid {
+  padding: 0;
+  margin: 6px 2px;
+  background: transparent;
+  border: none;
+}
+
+.widget-buttons-grid > flowbox {
+  margin: 0;
+}
+
+.widget-buttons-grid > flowbox > flowboxchild > button {
+  background: var(--chip);
+  border-radius: 9px;
+  color: var(--text);
+  padding: 9px 0;
+  margin: 4px;
+}
+
+.widget-buttons-grid > flowbox > flowboxchild > button:hover {
+  background: var(--chip-hover);
+}
+
+.widget-buttons-grid > flowbox > flowboxchild > button:checked {
+  background: var(--accent);
+  color: var(--bg-darker);
+}
+
+/* Menubar */
+.widget-menubar > box > .menu-button-bar > button {
+  color: var(--text);
+  background: transparent;
+  border: none;
+}
+
+.widget-menubar > box > .menu-button-bar > button:hover {
+  background: var(--chip-hover);
+}
+
+/* Volume — cyan */
+.widget-volume {
+  background: var(--chip);
+  border: none;
+  padding: 10px 12px;
+  margin: 6px;
+  border-radius: var(--radius-card);
+}
+
+.widget-volume label {
+  color: var(--cyan);
+}
+
+.widget-volume trough highlight {
+  background: var(--cyan);
+  border-radius: 100px;
+}
+
+/* Backlight — yellow */
+.widget-backlight {
+  background: var(--chip);
+  border: none;
+  padding: 10px 12px;
+  margin: 6px;
+  border-radius: var(--radius-card);
+}
+
+.widget-backlight label {
+  color: var(--yellow);
+}
+
+.widget-backlight trough highlight {
+  background: var(--yellow);
+  border-radius: 100px;
+}
+
+/* Inhibitors */
+.widget-inhibitors {
+  margin: 8px 6px;
+  font-size: 1.05rem;
+  color: var(--text-dim);
+}
+
+.widget-inhibitors > button {
+  color: var(--text);
+  background: var(--chip);
+  border: none;
+  border-radius: 9px;
+}
+
+.widget-inhibitors > button:hover {
+  background: var(--chip-hover);
+}

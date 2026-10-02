@@ -1,0 +1,14 @@
+/* ~/.config/waybar/colors.css — Dracula + your system accent */
+@define-color bg        #282a36;
+@define-color bg-dark   #21222c;
+@define-color current   #44475a;
+@define-color fg        #f8f8f2;
+@define-color comment   #6272a4;
+
+@define-color accent    #bd93f9;   /* your system accent */
+@define-color cyan      #8be9fd;
+@define-color green     #50fa7b;
+@define-color orange    #ffb86c;
+@define-color pink      #ff79c6;
+@define-color red       #ff5555;
+@define-color yellow    #f1fa8c;
